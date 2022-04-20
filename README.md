@@ -69,6 +69,24 @@ void shutdown(void)
   keyboard_delay(50);
   keyboard_press_str("uuuuuuuuuuuuuuuuuuu\n", 1);
 }
+mouse_move(100, 100);
+custom_press_key(VOL_DOWN, 1);
+keyboard_press_str("hello world", 1);
+touch_set_pos(666, 666);
+touch_set_time(100);
+```
+
+关于USB数据接收
+
+数据接收中断回调函数在psk_hid.c里, 目前接收了键盘的三个指示灯
+
+更详细的使用见四个头文件
+
+```c
+#include "mouse.h"
+#include "keyboard.h"
+#include "touch_screen.h"
+#include "custom_control.h"
 ```
 
 #### 自定义
@@ -86,6 +104,9 @@ void shutdown(void)
 ```
 
 改设备描述符(不建议, 因为改了后可能每个设备的报告 ID 要改)
+
 usbd_custom_hid_if.c , 91 行
+
 CUSTOM_HID_ReportDesc_FS <- 这个是设备描述符数组
+
 USBD_CUSTOM_HID_REPORT_DESC_SIZE <- 这个是长度, 必须和设备描述符数组长度匹配
