@@ -1,0 +1,14 @@
+{
+    "files.associations": {
+        "main.h": "c",
+        "tim.h": "c",
+        "usbd_custom_hid_if.h": "c",
+        "keyboard.h": "c",
+        "psk_hid.h": "c",
+        "usbd_customhid.h": "c",
+        "mouse.h": "c",
+        "touch_screen.h": "c",
+        "usb_device.h": "c",
+        "usbd_def.h": "c"
+    }
+}
