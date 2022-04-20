@@ -76,11 +76,11 @@ touch_set_pos(666, 666);
 touch_set_time(100);
 ```
 
-关于USB数据接收
+#### 关于USB数据接收
 
 数据接收中断回调函数在psk_hid.c里, 目前接收了键盘的三个指示灯
 
-更详细的使用见四个头文件
+#### 更详细的使用见四个头文件
 
 ```c
 #include "mouse.h"
@@ -97,9 +97,9 @@ touch_set_time(100);
 #define USBD_VID     6666                                        // 生产商ID
 #define USBD_LANGID_STRING     1033                              // 不知道
 #define USBD_MANUFACTURER_STRING     "NJUST 6003-Ptisak LAB INC" // 生产商名字
-#define USBD_PID_FS     23333                                    // 产品ID, 每个产品唯一, 最好自己修改
+#define USBD_PID_FS     23333                                    // 产品ID, 每个产品唯一, 自己修改
 #define USBD_PRODUCT_STRING_FS     "Ptisak Pia !(o `~')/''"      // 产品名字
-#define USBD_CONFIGURATION_STRING_FS     "PSK INF"               // 配置字段, 可以改
+#define USBD_CONFIGURATION_STRING_FS     "PSK INF"               // 可以改
 #define USBD_INTERFACE_STRING_FS     "PSK HID INTERFACE"         // 可以改
 ```
 
