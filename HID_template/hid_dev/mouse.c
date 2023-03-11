@@ -2,12 +2,12 @@
  * @Author: Ptisak
  * @Date: 2022-04-19 08:40:35
  * @LastEditors: Ptisak
- * @LastEditTime: 2022-04-19 16:38:53
+ * @LastEditTime: 2023-03-11 15:40:53
  * @Version: Do not edit
  */
 #include "mouse.h"
 
-#ifdef USING_PID
+#ifdef MOUSE_USING_PID
 #include "pid.h"
 #endif
 
@@ -21,7 +21,7 @@ mouse_state_t mouse_state;
 
 void mouse_init(void)
 {
-#ifdef USING_PID
+#ifdef MOUSE_USING_PID
     PID_struct_init(&pid_x, POSITION_PID, 100.f, 100.f, 0.6f, 0.0f, 0.2f);
     PID_struct_init(&pid_y, POSITION_PID, 100.f, 100.f, 0.6f, 0.0f, 0.2f);
 #endif
@@ -46,7 +46,7 @@ void send_mouse_data(void)
     else
     {
 
-#ifdef USING_PID
+#ifdef MOUSE_USING_PID
         tMouse_buff.mouse_rel_x = (int8_t)pid_calc(&pid_x, mouse_state.cur_x, mouse_state.x);
         tMouse_buff.mouse_rel_y = (int8_t)pid_calc(&pid_y, mouse_state.cur_y, mouse_state.y);
 
@@ -85,7 +85,7 @@ void send_mouse_data(void)
     else
     {
         memcpy(&tMouse_buff_last, &tMouse_buff, sizeof(tMouse_buff));
-        USBD_CUSTOM_HID_SendReport_FS((uint8_t *)&tMouse_buff, sizeof(tMouse_buff));
+        MY_USB_HID_SEND_REPORT((uint8_t *)&tMouse_buff, sizeof(tMouse_buff));
     }
 }
 

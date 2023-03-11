@@ -2,15 +2,15 @@
  * @Author: Ptisak
  * @Date: 2022-03-18 20:57:47
  * @LastEditors: Ptisak
- * @LastEditTime: 2022-04-19 16:39:38
+ * @LastEditTime: 2023-03-11 15:39:32
  * @Description: file content
  */
 #ifndef _MOUSE_H
 #define _MOUSE_H
 #include "main.h"
+#include "psk_hid.h"
 #include "usbd_custom_hid_if.h"
 
-#define USING_PID
 
 typedef struct
 {

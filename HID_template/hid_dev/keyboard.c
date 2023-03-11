@@ -2,7 +2,7 @@
  * @Author: Ptisak
  * @Date: 2022-04-19 08:40:35
  * @LastEditors: Ptisak
- * @LastEditTime: 2022-04-20 14:20:25
+ * @LastEditTime: 2023-03-11 15:58:37
  * @Version: Do not edit
  */
 #include "keyboard.h"
@@ -12,8 +12,10 @@ keyboard_buff tkeyboard_buff_last;
 keyboard_state_t keyboard_state;
 struct keyboard_led_state_t keyboard_led_state;
 
+#ifdef KEYBOARD_WITH_LWRB
 lwrb_t keyboard_command;
 int8_t keyboard_command_buff[COMMAND_SIZE];
+#endif
 
 enum kbd_co
 {
@@ -32,6 +34,8 @@ void send_keyboard_data(void)
     static uint8_t flag, lastsend;
     static int8_t data[3];
     static int16_t delay_time;
+
+#ifdef KEYBOARD_WITH_LWRB
     while (lwrb_get_full(&keyboard_command) >= 3 && data[0] != SET_DELAY)
     {
         lwrb_read(&keyboard_command, (uint8_t *)data, 3);
@@ -56,6 +60,7 @@ void send_keyboard_data(void)
             data[0] = WAIT;
         }
     }
+#endif
 
     if (memcmp(&tkeyboard_buff_last, &tkeyboard_buff, 9) == 0)
     {
@@ -63,14 +68,14 @@ void send_keyboard_data(void)
         if (lastsend)
         {
             lastsend--;
-            USBD_CUSTOM_HID_SendReport_FS((uint8_t *)&tkeyboard_buff, 9u);
+            MY_USB_HID_SEND_REPORT((uint8_t *)&tkeyboard_buff, 9u);
         }
     }
     else
     {
         memcpy(&tkeyboard_buff_last, &tkeyboard_buff, 9);
 
-        USBD_CUSTOM_HID_SendReport_FS((uint8_t *)&tkeyboard_buff, 9u);
+        MY_USB_HID_SEND_REPORT((uint8_t *)&tkeyboard_buff, 9u);
         lastsend = 2;
     }
     flag = 1;
@@ -126,7 +131,9 @@ void keyboard_init(void)
     memset(&tkeyboard_buff_last, 0X00, sizeof(tkeyboard_buff_last));
     tkeyboard_buff.report_id = 0x01;
     memset(&keyboard_state, 0X00, sizeof(keyboard_state));
+#ifdef KEYBOARD_WITH_LWRB
     lwrb_init(&keyboard_command, (uint8_t *)keyboard_command_buff, COMMAND_SIZE);
+#endif
 }
 void add_special_code(enum keyboard_sp_key k, int8_t reprot_times)
 {
@@ -171,7 +178,22 @@ void add_key_code(uint8_t k, int8_t reprot_times)
 void kbd_write_command(int8_t a, int8_t b, int8_t c)
 {
     int8_t data[3] = {a, b, c};
+#ifdef KEYBOARD_WITH_LWRB
     lwrb_write(&keyboard_command, data, 3);
+#else
+    switch (data[0])
+    {
+    case SET_SP:
+        add_special_code((enum keyboard_sp_key)data[1], data[2]);
+        break;
+    case SET_NOR:
+        add_key_code(*((uint8_t *)(data + 1)), data[2]);
+        break;
+    case SET_DELAY:
+        // delay_time = (data[1] << 8) | (data[2] & 0x00ff);
+        HAL_Delay(SEND_DELAY * (data[1] << 8) | (data[2] & 0x00ff)) break;
+    }
+#endif
 }
 
 void keyboard_delay(int16_t time_ms)

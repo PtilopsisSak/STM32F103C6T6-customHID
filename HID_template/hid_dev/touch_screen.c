@@ -2,7 +2,7 @@
  * @Author: Ptisak
  * @Date: 2022-04-19 08:40:35
  * @LastEditors: Ptisak
- * @LastEditTime: 2022-04-20 14:24:13
+ * @LastEditTime: 2023-03-11 18:21:33
  * @Version: 1.0
  */
 #include "touch_screen.h"
@@ -45,7 +45,7 @@ void send_touch_data(void)
     }
     if (ttouch_buff.touch_flag || k != 0)
     {
-        USBD_CUSTOM_HID_SendReport_FS((uint8_t *)&ttouch_buff, sizeof(ttouch_buff));
+        MY_USB_HID_SEND_REPORT((uint8_t *)&ttouch_buff, sizeof(ttouch_buff));
     }
 }
 

@@ -2,18 +2,23 @@
  * @Author: Ptisak
  * @Date: 2022-03-18 20:57:47
  * @LastEditors: Ptisak
- * @LastEditTime: 2022-04-20 14:06:29
+ * @LastEditTime: 2023-03-11 16:00:43
  * @Description: file content
  */
 #ifndef _KEYBOARD_H
 #define _KEYBOARD_H
 #include "main.h"
-#include "usbd_custom_hid_if.h"
-#include "lwrb.h"
 #include "psk_hid.h"
+
+#ifdef KEYBOARD_WITH_LWRB
+#include "lwrb.h"
+#define COMMAND_SIZE 99
+#else
+#warning "No using command buff, DELAY using HAL_Delay() instead"
+#endif
+
 #define USING_SHELL 0
 
-#define COMMAND_SIZE 99
 
 enum keyboard_key
 {
@@ -101,6 +106,7 @@ void keyboard_init(void);
 void add_special_code(enum keyboard_sp_key k, int8_t reprot_times);
 void add_key_code(uint8_t k, int8_t reprot_times);
 void kbd_write_command(int8_t a, int8_t b, int8_t c);
+
 
 /**
  * @brief : ÃüÁîÄ£Ê½
