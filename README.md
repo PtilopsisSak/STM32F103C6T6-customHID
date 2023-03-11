@@ -110,3 +110,7 @@ usbd_custom_hid_if.c , 91 行
 CUSTOM_HID_ReportDesc_FS <- 这个是设备描述符数组
 
 USBD_CUSTOM_HID_REPORT_DESC_SIZE <- 这个是长度, 必须和设备描述符数组长度匹配
+
+#### 之后应该会有用cubeMX从头开始配置的介绍, 只需要hid_dev中的文件就行了
+
+开始咕咕咕
